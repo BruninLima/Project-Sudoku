@@ -3,7 +3,7 @@
 
 from copy import deepcopy
 
-hard_sudoku  =        [[8,0,0,0,0,0,0,0,0],
+normal_sudoku  =      [[8,0,0,0,0,0,0,0,0],
                        [0,0,3,6,0,0,0,0,0],
                        [0,7,0,0,9,0,2,0,0],
                        [0,5,0,0,0,7,0,0,0],
@@ -13,7 +13,7 @@ hard_sudoku  =        [[8,0,0,0,0,0,0,0,0],
                        [0,0,8,5,0,0,0,1,0],
                        [0,9,0,0,0,0,4,0,0]]
 
-hard_sol =            [[8,1,2,7,5,3,6,4,9],
+normal_sol =          [[8,1,2,7,5,3,6,4,9],
                        [9,4,3,6,8,2,1,7,5],
                        [6,7,5,4,9,1,2,8,3],
                        [1,5,4,2,3,7,8,9,6],
@@ -118,7 +118,7 @@ def create_from_solution(n,board):
     return game
 
 def sudoku_creator(seed = 0):
-    solved_boards = [min_sol,hard_sol,null_sol]
+    solved_boards = [min_sol,normal_sol,null_sol]
     game = solved_boards[seed]
     for n in range(65): 
         n_board = create_from_solution(1,game)
@@ -137,4 +137,6 @@ def generator(seed = 0,maxiter = 5):
         if moves >= minmoves:
             minmoves = moves
             minboard = board
+        if moves == 17:
+        	return board, moves
     return minboard, minmoves

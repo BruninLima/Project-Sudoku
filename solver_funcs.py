@@ -1,5 +1,5 @@
 ### Solver Functions ###
-#Bruno Ramos Lima Netto
+# Bruno Ramos Lima Netto
 
 def num_moves(sudoku):
     'returns the maximum number of moves to do on the current sudoku / Counting the zeroes(empty squares)'
@@ -16,29 +16,29 @@ def all_moves():
     return ans
 
 def available_moves(sudoku):
-    'returns the available moves of each EMPTY square(zeroes)'
+    'returns the available guess_list of each EMPTY square(zeroes)'
 
-    moves = all_moves()
+    guess_list = all_moves()
  
     for i in range(9):
         for j in range(9):
             if (not (sudoku[i][j])) == False:
                 numago = sudoku[i][j]
-                moves[(9*i + j)] = []
+                guess_list[(9*i + j)] = []
                 
                 for k in range(9):
-                    if numago in moves[9*i +k]:
-                        moves[(9*i + k)].remove(numago)  #remove da linha
-                    if numago in moves[(9*k + j)]:
-                        moves[(9*k + j)].remove(numago)  #remove da coluna
+                    if numago in guess_list[9*i +k]:
+                        guess_list[(9*i + k)].remove(numago)  #remove da linha
+                    if numago in guess_list[(9*k + j)]:
+                        guess_list[(9*k + j)].remove(numago)  #remove da coluna
                         
                 a,b = (i//3)*3,(j//3)*3
                 
                 for m in range(a,a+3):
                     for n in range(b,b+3):
-                        if numago in moves[9*m+n]:
-                            moves[(9*m+n)].remove(numago)
-    return moves
+                        if numago in guess_list[9*m+n]:
+                            guess_list[(9*m+n)].remove(numago)
+    return guess_list
 
 def next_move(guess_list):
     'returns a list with the next guesses, and its indexes (q,r)'
@@ -89,12 +89,6 @@ def refresh_guess_list(move,q,r,guess_list):
 
     return new_guess_list
 
-def refresh_single_guess(move,q,r,guess_list):
-    new_guess_list        = guess_list
-    new_guess_list[9*q+r] = []
-    
-    return new_guess_list
-
 def copy_GL(guess_list):
     return [l[:] for l in guess_list]
 
@@ -113,6 +107,7 @@ def check_col(n,guess_list):
 
 def check_box(n,guess_list):
     'returns the n_th box in the guess_list (n from 0 to 8)'
+    #code gore  basically math to get the right indexes from the boxes
     if n < 3:
         nth_box = guess_list[n*3:(n+1)*3] + guess_list[n*3 + 9:(n+1)*3 + 9] + guess_list[n*3 + 18:(n+1)*3 + 18]
         idxs = [n*3,3*n+1,3*n+2,n*3 + 9,n*3 + 10,n*3 + 11,n*3 + 18,n*3 + 19,n*3 + 20]
@@ -123,3 +118,28 @@ def check_box(n,guess_list):
         nth_box = guess_list[54+(n%3)*3:54+(n%3+1)*3] + guess_list[63+(n%3)*3:63+(n%3+1)*3] + guess_list[72+(n%3)*3:72+(n%3+1)*3]
         idxs = [54+(n%3)*3,55+(n%3)*3,56+(n%3)*3,63+(n%3)*3,64+(n%3)*3,65+(n%3)*3,72+(n%3)*3,73+(n%3)*3,74+(n%3)*3]
     return nth_box,idxs
+
+def check_singles(guess_list):
+    singles = []
+    for i in range(9):
+        i_box,box_idxs = check_box(i,guess_list)
+        i_line,line_idxs = check_line(i,guess_list)
+        i_col,col_idxs = check_col(i,guess_list)
+        for j in range(1,10):
+            if sum(i_box,[]).count(j) == 1:
+                for a,square in enumerate(i_box):
+                    if j in square:
+                        if [[j,box_idxs[a]]] not in singles:
+                            singles += [[j,box_idxs[a]]]
+            if sum(i_line,[]).count(j) == 1:
+                for a,square in enumerate(i_line):
+                    if j in square:
+                        if [[j,line_idxs[a]]] not in singles:
+                            singles += [[j,line_idxs[a]]]
+
+            if sum(i_col,[]).count(j) == 1:
+                for a,square in enumerate(i_col):
+                    if j in square:
+                        if [[j,col_idxs[a]]] not in singles:
+                            singles += [[j,col_idxs[a]]]
+    return singles
