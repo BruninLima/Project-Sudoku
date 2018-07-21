@@ -2,6 +2,7 @@
 # Bruno Ramos Lima Netto
 
 from copy import deepcopy
+import numpy as np
 
 normal_sudoku  =      [[8,0,0,0,0,0,0,0,0],
                        [0,0,3,6,0,0,0,0,0],
@@ -110,7 +111,7 @@ def unique_sudoku(sudoku):
 
 def create_from_solution(n,board):
     'removes n ~random~ numbers from a given board'
-    game = copy.deepcopy(board)
+    game = deepcopy(board)
     a = np.random.choice(81,n, replace = False)
     for i in a:
         m,n = divmod(i,9)

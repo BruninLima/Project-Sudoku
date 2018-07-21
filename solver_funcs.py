@@ -16,7 +16,7 @@ def all_moves():
     return ans
 
 def available_moves(sudoku):
-    'returns the available guess_list of each EMPTY square(zeroes)'
+    'returns the available guess_list of every square'
 
     guess_list = all_moves()
  
