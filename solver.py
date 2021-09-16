@@ -4,11 +4,33 @@
 import numpy as np
 from solver_funcs import *
 
+class Backtracking:
+    def __init__(self, initial_state, next_states, is_final_state) -> None:
+        self.initial_state = initial_state
+        self.next_states = next_states
+        self.is_final_state = is_final_state
+    
+    def solve(self):
+        return sef.__solve(self.is_final_state, [])
+
+    def __solve(self, state, visited):
+        if self.is_final_state(state):
+            return [state]
+        else:
+            for s in self.next_states(state, visited):
+                result = self.__solve(s, visited)
+                if result != None:
+                    return [state] + result
+            return None
+
+
 def sudoku_starter(board):
     'adapting to the guess_list variable'
     backups         = [] #sudokus backup
     branch          = [] # branch of the guessing tree 
-    sudoku_board    = np.empty((9,9), dtype = int) # empty sudoku 9x9 board 
+    sudoku_board    = np.empty((9,9), dtype = int) # empty sudoku 9x9 boara
+    
+     
     sudoku_board[:] = board[:]  #here we copy the board list
     moves           = num_moves(sudoku_board)  # counts the number of zeroes
     guess_list      = available_moves(sudoku_board) #list with all the possible moves
